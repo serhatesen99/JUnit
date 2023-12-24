@@ -31,3 +31,10 @@ jobs:
       with:
         paths: ${{ github.workspace }}/maven-junit-project/target/site/jacoco/jacoco.xml
         token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Fail PR if overall coverage is less than 95%
+      if: ${{ steps.jacoco.outputs.coverage-overall < 60.0 }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          core.setFailed('Overall coverage is less than 60%!')
